@@ -1,0 +1,46 @@
+<!--
+  html/projetos.html — template da rota "/projetos".
+  Fragmento HTML puro (sem <html>/<head>/<body>), injetado em
+  #conteudo-principal pelo sistema de templates.
+-->
+<section class="secao">
+  <div class="envolucro">
+    <div class="secao-cabecalho">
+      <p class="etiqueta">Iniciativas solidárias</p>
+      <h1>Projetos em andamento</h1>
+      <p>Cada projeto tem uma coordenação própria, dias fixos de atividade e vagas específicas para voluntários. Encontre o que combina com sua disponibilidade e cadastre-se.</p>
+    </div>
+
+    <!--
+      Os 4 cartões abaixo NÃO ficam mais escritos à mão aqui. Este
+      <template> é o "molde" (nunca é renderizado pelo navegador
+      sozinho) e js/componentes.js clona uma cópia dele para cada
+      projeto de um array de dados, preenche os campos e injeta o
+      resultado em #lista-projetos. Ver detalhes no módulo.
+    -->
+    <template id="modelo-projeto">
+      <article class="projeto">
+        <div class="projeto-topo">
+          <svg class="icone" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path data-campo="icone" d="" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h2 data-campo="titulo"></h2>
+        </div>
+        <div class="projeto-corpo">
+          <p data-campo="descricao"></p>
+          <ul class="projeto-meta">
+            <li data-campo="horario"></li>
+            <li data-campo="local"></li>
+            <li data-campo="publico"></li>
+          </ul>
+          <div class="projeto-rodape">
+            <span class="etiqueta" data-campo="etiqueta"></span>
+            <a class="botao botao--contorno-claro" href="#/cadastro" data-rota="/cadastro">Quero participar</a>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <div class="lista-projetos" id="lista-projetos" aria-live="polite"></div>
+  </div>
+</section>

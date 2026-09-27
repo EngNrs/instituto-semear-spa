@@ -15,6 +15,7 @@
  */
 import { renderizarRota } from './templates.js';
 import { renderizarProjetos } from './componentes.js';
+import { iniciarCadastro } from './validacao.js';
 
 const ROTAS = {
   '/': 'html/inicio.html',
@@ -29,6 +30,7 @@ const ROTA_PADRAO = '/';
 // dados (ver componentes.js).
 const INICIALIZAR_ROTA = {
   '/projetos': renderizarProjetos,
+  '/cadastro': iniciarCadastro,
 };
 
 function rotaAtual() {

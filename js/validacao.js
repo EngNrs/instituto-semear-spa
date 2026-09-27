@@ -10,6 +10,8 @@
  * visita, não há acúmulo de handlers antigos presos a nós que já
  * saíram do DOM.
  */
+import { salvarVoluntario } from './armazenamento.js';
+
 export function iniciarCadastro() {
   const form = document.getElementById('form-voluntario');
   if (!form) return; // rota diferente montada — nada a fazer
@@ -63,6 +65,9 @@ export function iniciarCadastro() {
     return valor;
   }
 
+  // A cada tecla digitada (evento "input"), reescrevo o valor do campo
+  // já formatado e reposiciono o cursor — sem isso, o cursor saltaria
+  // para o fim do campo a cada caractere.
   function aplicarMascara(campo, funcaoMascara) {
     campo.addEventListener('input', function () {
       const posicaoOriginal = campo.selectionStart;
@@ -273,12 +278,23 @@ export function iniciarCadastro() {
       return;
     }
 
-    const nome = document.getElementById('nome').value.trim().split(' ')[0];
+    // Reúno os campos do formulário num objeto simples — inclusive
+    // "dias", que tem vários checkboxes com o mesmo name e por isso
+    // precisa de getAll() em vez de get() — para entregar a
+    // armazenamento.js, o único módulo que sabe falar com o
+    // localStorage.
+    const dadosFormulario = Object.fromEntries(new FormData(form).entries());
+    dadosFormulario.dias = new FormData(form).getAll('dias');
+    const historico = salvarVoluntario(dadosFormulario);
+
+    const nome = dadosFormulario.nome.trim().split(' ')[0];
     form.hidden = true;
     const confirmacao = document.getElementById('confirmacao-envio');
     if (confirmacao) {
       confirmacao.hidden = false;
       confirmacao.querySelector('[data-nome]').textContent = nome;
+      confirmacao.querySelector('[data-total]').textContent =
+        `Este é o cadastro nº ${historico.length} salvo neste navegador.`;
       confirmacao.focus();
     }
   });

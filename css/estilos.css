@@ -1,0 +1,696 @@
+/* ===================================================================
+   Instituto Semear — Design System + folha de estilos
+   Fundamentos (cor, tipografia, espaçamento) documentados abaixo,
+   em :root. Toda regra do arquivo consome esses tokens — nenhum
+   valor de cor, tamanho de fonte ou espaçamento é escrito "solto".
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+/* ---------- Tokens: Design System ---------- */
+:root {
+  /* ---- Cor · Primária (marca / ações principais) ---- */
+  --primary: #2f6b4f;         /* verde-semente — nav ativa, links, ícones de destaque */
+  --primary-strong: #1f4d38;  /* verde escuro — rodapé, texto sobre fundo claro */
+
+  /* ---- Cor · Secundária (acento / chamada para ação) ---- */
+  --accent: #e08e31;          /* âmbar — botão primário, CTAs de doação/voluntariado */
+  --accent-strong: #b96f1e;   /* âmbar escuro — hover/estado ativo do acento */
+
+  /* ---- Cor · Neutros (fundo → texto, 6 degraus) ---- */
+  --bg: #f3f6ee;               /* fundo geral da página */
+  --surface: #ffffff;          /* fundo de cartões/formulário */
+  --surface-2: #eaf1e3;        /* fundo alternativo (tags, seções alternadas) */
+  --line: #d8e0d2;             /* bordas e divisores */
+  --ink-soft: #46574b;         /* texto secundário/parágrafos */
+  --ink: #16241b;              /* texto principal, títulos */
+
+  /* ---- Cor · Semântica (estado, não fazem parte da paleta livre) ---- */
+  --sucesso: #2f6b4f;
+  --erro: #b3261e;
+  --erro-bg: #fbeae9;
+  --foco: #1c6dd0;
+
+  /* ---- Tipografia · famílias ---- */
+  --fonte-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --fonte-corpo: "Work Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* ---- Tipografia · escala (8 patamares, base 16px) ----
+     Os 5 primeiros são fixos (previsibilidade em UI/texto corrido);
+     os 2 de título usam clamp() fluido (escalam com o viewport);
+     --fs-metric é um tamanho fixo dedicado aos números de destaque. */
+  --fs-caption: 0.75rem;                              /* 12px — tags, legendas */
+  --fs-small: 0.875rem;                                /* 14px — dicas, erros, metadados */
+  --fs-body: 1rem;                                     /* 16px — texto corrido */
+  --fs-lead: 1.125rem;                                 /* 18px — parágrafo de destaque */
+  --fs-h3: 1.25rem;                                    /* 20px — subtítulo de cartão/seção */
+  --fs-h2: clamp(1.5rem, 1.3rem + 1vw, 2.1rem);        /* 24–33.6px fluido — título de seção */
+  --fs-h1: clamp(2rem, 1.5rem + 2vw, 3.2rem);          /* 32–51.2px fluido — título da página */
+  --fs-metric: 2rem;                                   /* 32px fixo — números de estatística */
+
+  /* ---- Espaçamento · escala modular estrita (base 4px) ----
+     Todo valor é múltiplo de 4px — nenhuma margin/padding/gap do
+     projeto usa um número fora desta lista. */
+  --space-1: 0.25rem;   /*  4px */
+  --space-2: 0.5rem;    /*  8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 2.5rem;    /* 40px */
+  --space-9: 3rem;      /* 48px */
+  --space-10: 4rem;     /* 64px */
+  --space-11: 5rem;     /* 80px */
+  --space-12: 6rem;     /* 96px */
+
+  --sombra: 0 8px 24px -12px rgb(22 36 27 / 0.25);
+  --raio: 14px;
+  --raio-peq: 8px;
+  --largura-conteudo: 1120px;
+
+  /* ---- Grid · base 12 colunas ---- */
+  --grid-colunas: 12;
+}
+
+/* ---- Breakpoints do projeto (documentação — @media não lê var()) ----
+   480px  · celular pequeno     · 1 coluna, espaçamento reduzido
+   640px  · celular grande      · cartões "como ajudar" empilham (12/12)
+   700px  · celular/tablet retrato · campos do formulário empilham (12/12)
+   780px  · tablet retrato      · menu vira hambúrguer; grids passam a 2 colunas (6/6)
+   860px  · tablet paisagem     · herói e "quem somos" empilham (12/12)
+   900px  · laptop pequeno      · cartões "como ajudar" passam a 2 colunas (6/6)
+   1440px · desktop panorâmico  · container alarga, grids ganham mais respiro
+   7 pontos de quebra cobrindo do celular ao desktop panorâmico. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101a10;
+    --surface: #182618;
+    --surface-2: #1f301f;
+    --ink: #eaf0e4;
+    --ink-soft: #a9b8a0;
+    --primary: #7fc79a;
+    --primary-strong: #a3dab8;
+    --accent: #f2a94e;
+    --accent-strong: #ffbd6d;
+    --line: #2c3b29;
+    --erro: #ff8a80;
+    --erro-bg: #3a1f1c;
+    --sucesso: #7fc79a;
+    --foco: #7fb8ff;
+    --sombra: 0 8px 28px -12px rgb(0 0 0 / 0.55);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #101a10;
+  --surface: #182618;
+  --surface-2: #1f301f;
+  --ink: #eaf0e4;
+  --ink-soft: #a9b8a0;
+  --primary: #7fc79a;
+  --primary-strong: #a3dab8;
+  --accent: #f2a94e;
+  --accent-strong: #ffbd6d;
+  --line: #2c3b29;
+  --erro: #ff8a80;
+  --erro-bg: #3a1f1c;
+  --sucesso: #7fc79a;
+  --foco: #7fb8ff;
+  --sombra: 0 8px 28px -12px rgb(0 0 0 / 0.55);
+}
+
+/* ---------- Reset leve ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--fonte-corpo);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3 { font-family: var(--fonte-display); text-wrap: balance; color: var(--ink); line-height: 1.15; margin: 0 0 .5em; }
+h1 { font-size: var(--fs-h1); font-weight: 600; }
+h2 { font-size: var(--fs-h2); font-weight: 600; }
+h3 { font-size: var(--fs-h3); font-weight: 600; }
+p { margin: 0 0 1em; color: var(--ink-soft); max-width: 65ch; }
+a { color: var(--primary-strong); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+:target { scroll-margin-top: var(--space-12); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .anima-entrada { animation: subir .5s ease-out both; }
+}
+@keyframes subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Utilitários de layout ---------- */
+.envolucro {
+  width: 100%;
+  max-width: var(--largura-conteudo);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+.pular-para-conteudo {
+  position: absolute;
+  left: var(--space-4);
+  top: calc(var(--space-9) * -1);
+  background: var(--primary);
+  color: #fff;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--raio-peq);
+  transition: top .15s ease;
+  z-index: 100;
+}
+.pular-para-conteudo:focus { top: var(--space-4); }
+
+.etiqueta {
+  display: inline-block;
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--primary-strong);
+  background: var(--surface-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  margin-bottom: var(--space-4);
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--fonte-corpo);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--raio-peq);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.botao:hover { transform: translateY(-1px); }
+.botao--primario { background: var(--accent); color: #26170a; }
+.botao--primario:hover { background: var(--accent-strong); }
+.botao--contorno { background: transparent; border-color: currentColor; color: var(--surface); }
+.botao--contorno-claro { background: transparent; border-color: var(--primary); color: var(--primary-strong); }
+.botao--bloco { width: 100%; justify-content: center; }
+.botao[disabled] { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* ---------- Cabeçalho / navegação ---------- */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.cabecalho .envolucro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--space-10);
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--fonte-display);
+  font-weight: 600;
+  font-size: var(--fs-h3);
+  color: var(--ink);
+  text-decoration: none;
+}
+.marca svg { flex-shrink: 0; }
+
+.nav-principal ul {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-principal a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+  padding-bottom: var(--space-1);
+  border-bottom: 2px solid transparent;
+}
+.nav-principal a:hover { color: var(--ink); }
+.nav-principal a[aria-current="page"] {
+  color: var(--primary-strong);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.botao-menu {
+  display: none;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--raio-peq);
+  padding: var(--space-2);
+  cursor: pointer;
+  color: var(--ink);
+}
+
+@media (max-width: 780px) {
+  .botao-menu { display: inline-flex; }
+  .nav-principal {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--sombra);
+  }
+  .nav-principal[hidden] { display: none; }
+  .nav-principal ul {
+    flex-direction: column;
+    gap: 0;
+    padding: var(--space-2) var(--space-5) var(--space-5);
+  }
+  .nav-principal li { border-top: 1px solid var(--line); }
+  .nav-principal li:first-child { border-top: none; }
+  .nav-principal a { display: block; padding: var(--space-4) 0; }
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  background: var(--primary-strong);
+  color: #eef5ef;
+  margin-top: var(--space-11);
+}
+.rodape a { color: #eef5ef; }
+.rodape .envolucro {
+  padding-block: var(--space-9) var(--space-7);
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 1.3fr 1fr 1fr;
+}
+.rodape h3 { color: #fff; font-size: var(--fs-body); }
+.rodape p, .rodape address { color: #cfe2d3; font-style: normal; }
+.rodape ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.rodape-base {
+  border-top: 1px solid rgb(255 255 255 / .15);
+  padding: var(--space-4) 0;
+  text-align: center;
+  font-size: var(--fs-small);
+  color: #b9d2bd;
+}
+@media (max-width: 780px) {
+  .rodape .envolucro { grid-template-columns: 1fr; padding-block: var(--space-8) var(--space-6); }
+}
+
+/* ---------- Seção institucional (quem somos) ---------- */
+.missao-grade {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-9);
+  align-items: center;
+}
+.missao-texto { grid-column: span 6; }
+.missao-figura { grid-column: span 6; margin: 0; }
+.missao-figura img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--raio);
+  border: 1px solid var(--line);
+  box-shadow: var(--sombra);
+}
+.missao-figura figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+@media (max-width: 860px) {
+  .missao-texto, .missao-figura { grid-column: span 12; }
+  .missao-figura { order: -1; }
+}
+
+/* ---------- Seções genéricas ---------- */
+.secao { padding-block: clamp(var(--space-9), 2rem + 4vw, var(--space-12)); }
+.secao--alt { background: var(--surface); border-block: 1px solid var(--line); }
+.secao-cabecalho { max-width: 62ch; margin-bottom: var(--space-8); }
+
+/* ---------- Herói (index) ---------- */
+.heroi .envolucro {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-9);
+  align-items: center;
+  padding-block: clamp(var(--space-8), 2rem + 3vw, var(--space-10));
+}
+.heroi-texto { grid-column: span 7; }
+.heroi p.lide { font-size: var(--fs-lead); color: var(--ink-soft); }
+.heroi-acoes { display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-6); }
+.heroi-figura {
+  grid-column: span 5;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--raio);
+  padding: var(--space-6);
+  box-shadow: var(--sombra);
+}
+@media (max-width: 860px) {
+  .heroi-texto, .heroi-figura { grid-column: span 12; }
+  .heroi-figura { order: -1; max-width: 22rem; margin-inline: auto; }
+}
+
+/* ---------- Estatísticas ---------- */
+.estatisticas {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.estatisticas li {
+  grid-column: span 3;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--raio);
+  padding: var(--space-6) var(--space-5);
+  text-align: left;
+}
+.estatisticas strong {
+  display: block;
+  font-family: var(--fonte-display);
+  font-size: var(--fs-metric);
+  font-variant-numeric: tabular-nums;
+  color: var(--primary-strong);
+}
+.estatisticas span { font-size: var(--fs-small); color: var(--ink-soft); }
+@media (max-width: 780px) {
+  .estatisticas li { grid-column: span 6; }
+}
+@media (max-width: 480px) {
+  .estatisticas li { grid-column: span 12; }
+}
+
+/* ---------- Cartões (como ajudar / projetos) ---------- */
+.grade-cartoes {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-6);
+}
+.cartao {
+  grid-column: span 4;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--raio);
+  padding: var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.cartao .icone {
+  width: var(--space-8);
+  height: var(--space-8);
+  color: var(--primary-strong);
+}
+.cartao p { margin-bottom: var(--space-1); }
+.cartao .cartao-link { margin-top: auto; font-weight: 600; text-decoration: none; }
+@media (max-width: 900px) {
+  .cartao { grid-column: span 6; }
+}
+@media (max-width: 640px) {
+  .cartao { grid-column: span 12; }
+}
+
+/* ---------- Depoimento ---------- */
+.depoimento {
+  background: var(--surface-2);
+  border-radius: var(--raio);
+  padding: clamp(var(--space-6), 1.4rem + 2vw, var(--space-9));
+  display: grid;
+  gap: var(--space-4);
+}
+.depoimento blockquote {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: var(--fs-h3);
+  color: var(--ink);
+}
+.depoimento cite { font-style: normal; color: var(--ink-soft); font-weight: 600; }
+
+/* ---------- Projetos (listagem) ---------- */
+.lista-projetos {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-6);
+}
+.projeto {
+  grid-column: span 6;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--raio);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.projeto-topo {
+  background: var(--surface-2);
+  padding: var(--space-6) var(--space-6) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.projeto-topo .icone { width: var(--space-7); height: var(--space-7); color: var(--primary-strong); flex-shrink: 0; }
+.projeto-corpo { padding: var(--space-5) var(--space-6) var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+.projeto-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  list-style: none;
+  margin: 0 0 var(--space-1);
+  padding: 0;
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+.projeto-meta li { display: flex; align-items: center; gap: var(--space-1); }
+.projeto-rodape { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); }
+@media (max-width: 780px) {
+  .projeto { grid-column: span 12; }
+}
+
+/* ---------- Formulário (cadastro) ---------- */
+.cartao-formulario {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: clamp(var(--space-6), 1.2rem + 1.5vw, var(--space-9));
+}
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--space-8);
+}
+fieldset legend {
+  font-family: var(--fonte-display);
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  padding: 0 0 var(--space-1);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+}
+.grade-campos {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-5);
+}
+.grade-campos > .campo { grid-column: span 6; }
+.campo { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-5); }
+.campo--largo { grid-column: 1 / -1; }
+.grade-campos > .campo--largo { grid-column: 1 / -1; }
+.campo label { font-weight: 600; font-size: var(--fs-small); }
+.campo .opcional { font-weight: 400; color: var(--ink-soft); }
+.campo input,
+.campo select,
+.campo textarea {
+  font: inherit;
+  padding: var(--space-3);
+  border-radius: var(--raio-peq);
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+.campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--primary); }
+.campo textarea { resize: vertical; min-height: var(--space-12); }
+.campo .dica { font-size: var(--fs-small); color: var(--ink-soft); }
+.campo .erro-msg {
+  font-size: var(--fs-small);
+  color: var(--erro);
+  font-weight: 600;
+  display: none;
+}
+.campo.invalido input,
+.campo.invalido select {
+  border-color: var(--erro);
+  background: var(--erro-bg);
+}
+.campo.invalido .erro-msg,
+.consentimento.invalido .erro-msg { display: block; }
+.campo.valido input { border-color: var(--primary); }
+
+.consentimento.invalido {
+  background: var(--erro-bg);
+  outline: 1.5px solid var(--erro);
+}
+
+.grupo-checkbox { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); }
+.opcao-checkbox { display: flex; align-items: center; gap: var(--space-2); font-weight: 500; }
+.opcao-checkbox input { width: var(--space-5); height: var(--space-5); }
+
+.consentimento {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  background: var(--surface-2);
+  border-radius: var(--raio-peq);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.consentimento input { margin-top: var(--space-1); width: var(--space-4); height: var(--space-4); flex-shrink: 0; }
+.consentimento label { font-size: var(--fs-small); color: var(--ink-soft); font-weight: 500; }
+
+.mensagem-envio {
+  border-radius: var(--raio);
+  padding: var(--space-8);
+  text-align: center;
+  background: var(--surface-2);
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+}
+.mensagem-envio .icone { width: var(--space-9); height: var(--space-9); color: var(--sucesso); }
+.mensagem-envio[hidden] { display: none; }
+
+@media (max-width: 700px) {
+  .grade-campos > .campo { grid-column: span 12; }
+}
+
+/* ---------- Feedback: badges, alertas, toast ----------
+   Reaproveita os tokens semânticos já documentados no Design System
+   (--sucesso, --erro, --erro-bg, --foco, --accent) via color-mix() —
+   nenhuma variável de cor nova é criada para estes componentes. */
+
+/* Badges (crachás) — variações de cor sobre a base .etiqueta */
+.etiqueta--sucesso {
+  color: var(--sucesso);
+  background: color-mix(in srgb, var(--sucesso) 16%, var(--surface));
+}
+.etiqueta--aviso {
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+}
+.etiqueta--erro {
+  color: var(--erro);
+  background: var(--erro-bg);
+}
+
+/* Caixa de alerta — bloco com ícone, para avisos de contexto */
+.alerta {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  border-radius: var(--raio-peq);
+  border: 1.5px solid;
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--fs-small);
+  margin-bottom: var(--space-7);
+}
+.alerta .icone { width: var(--space-5); height: var(--space-5); flex-shrink: 0; margin-top: .1em; }
+.alerta p { margin: 0; color: inherit; }
+.alerta--info {
+  background: color-mix(in srgb, var(--foco) 8%, var(--surface));
+  border-color: color-mix(in srgb, var(--foco) 35%, transparent);
+  color: var(--ink);
+}
+.alerta--info .icone { color: var(--foco); }
+.alerta--sucesso {
+  background: color-mix(in srgb, var(--sucesso) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--sucesso) 35%, transparent);
+  color: var(--ink);
+}
+.alerta--sucesso .icone { color: var(--sucesso); }
+.alerta--aviso {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--ink);
+}
+.alerta--aviso .icone { color: var(--accent-strong); }
+.alerta--erro {
+  background: var(--erro-bg);
+  border-color: color-mix(in srgb, var(--erro) 40%, transparent);
+  color: var(--ink);
+}
+.alerta--erro .icone { color: var(--erro); }
+
+/* Toast — notificação não obstrutiva, empilhada no canto inferior,
+   usada para confirmar ações rápidas (preenchimento automático de
+   endereço pelo CEP) sem interromper o preenchimento do formulário. */
+.toast-area {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: min(22rem, calc(100vw - var(--space-8)));
+}
+.toast {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: var(--raio-peq);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--sombra);
+  font-size: var(--fs-small);
+  animation: subir-toast .2s ease-out both;
+}
+.toast .icone { width: var(--space-5); height: var(--space-5); flex-shrink: 0; color: var(--primary); }
+.toast--sucesso .icone { color: #7fc79a; }
+@keyframes subir-toast { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
+
+/* ---------- Breakpoint · celular pequeno (480px) ----------
+   Espaçamento lateral e vertical reduzido; a listagem de
+   estatísticas (já em span 12 aqui) ganha mais respiro entre si. */
+@media (max-width: 480px) {
+  .envolucro { padding-inline: var(--space-4); }
+  .secao { padding-block: var(--space-8); }
+  .cartao-formulario { padding: var(--space-5); }
+  .heroi .envolucro { gap: var(--space-6); }
+}
+
+/* ---------- Breakpoint · desktop panorâmico (1440px) ----------
+   O container ganha mais largura e os grids de cartão/projeto
+   ganham mais respiro entre colunas — sem alterar o número de
+   colunas do sistema de 12, só o espaçamento. */
+@media (min-width: 1440px) {
+  :root { --largura-conteudo: 1280px; }
+  .grade-cartoes,
+  .lista-projetos { gap: var(--space-8); }
+}

@@ -8,6 +8,7 @@
  * mantém o "contrato" simples: quem quer persistir dados só precisa
  * conhecer salvarVoluntario() e lerVoluntarios().
  */
+import { formatarDataAmigavel } from './utilidades.js';
 
 const CHAVE = 'institutoSemear:voluntarios';
 
@@ -64,10 +65,13 @@ export function restaurarContadorVoluntarios() {
   const elemento = document.getElementById('contador-voluntarios');
   if (!elemento) return;
   if (total > 0) {
+    const lista = lerVoluntarios();
+    const ultimoEnvio = formatarDataAmigavel(lista[lista.length - 1].enviadoEm);
     elemento.querySelector('[data-texto]').textContent =
-      total === 1
+      (total === 1
         ? 'Você já tem 1 cadastro salvo neste navegador.'
-        : `Você já tem ${total} cadastros salvos neste navegador.`;
+        : `Você já tem ${total} cadastros salvos neste navegador.`) +
+      ` Último em ${ultimoEnvio}.`;
     elemento.hidden = false;
   } else {
     elemento.hidden = true;

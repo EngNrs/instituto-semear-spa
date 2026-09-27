@@ -85,6 +85,19 @@
 
   <div class="toast-area" id="area-toast" aria-live="polite" aria-atomic="true"></div>
 
+  <!--
+    Day.js via CDN — biblioteca externa única do projeto, usada só para
+    formatar a data de envio de cada cadastro (ver js/utilidades.js).
+    Carregada como scripts clássicos com "defer" (não como módulo, porque
+    a build da CDN expõe uma variável global "dayjs" — é assim que a
+    própria biblioteca é distribuída) ANTES do <script type="module">
+    dos módulos da aplicação: scripts "defer" e módulos executam na
+    ordem em que aparecem no documento, então "dayjs" já existe como
+    global no momento em que js/app.js e seus imports rodam.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js" defer></script>
+
   <!-- Módulos ES (import/export nativo do navegador) — cada um cuida de
        uma área de responsabilidade só sua; app.js é o único ponto de
        entrada e orquestra os demais. -->

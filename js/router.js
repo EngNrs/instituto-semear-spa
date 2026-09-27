@@ -1,11 +1,50 @@
 /**
- * router.js — roteamento da SPA (a implementar em etapa futura).
+ * router.js — roteamento da SPA via hash (#/...).
  *
- * Responsabilidade prevista: mapear cada rota (ex.: "/", "/projetos",
- * "/cadastro") ao template correspondente em html/, reagir ao evento
- * "hashchange" da URL e atualizar qual link do menu recebe
- * aria-current="page". Fica isolado dos demais módulos — quem decide
- * O QUE mostrar em cada rota é o templates.js; este arquivo só decide
- * QUAL rota está ativa.
+ * Por que hash e não History API (pushState)? Rota por hash não exige
+ * nenhuma configuração de servidor (o navegador nunca pede um recurso
+ * novo ao trocar só o hash) e continua funcionando até abrindo o
+ * arquivo direto do disco — coerente com o restante do projeto, que
+ * não depende de build nem de back-end. O "roteamento SPA" aqui é: eu
+ * NUNCA preciso interceptar cliques com event.preventDefault(), porque
+ * um link para "#/rota" já não recarrega a página sozinho — a
+ * interceptação acontece um passo depois, ouvindo o evento
+ * "hashchange" que o navegador dispara toda vez que o hash muda
+ * (por clique, botão voltar/avançar do navegador, ou hash alterado
+ * programaticamente).
  */
-export {};
+import { renderizarRota } from './templates.js';
+
+const ROTAS = {
+  '/': 'html/inicio.html',
+  '/projetos': 'html/projetos.html',
+  '/cadastro': 'html/cadastro.html',
+};
+const ROTA_PADRAO = '/';
+
+function rotaAtual() {
+  const hash = window.location.hash.replace(/^#/, '');
+  return ROTAS[hash] ? hash : ROTA_PADRAO;
+}
+
+function marcarLinkAtivo(rota) {
+  document.querySelectorAll('[data-rota]').forEach(function (link) {
+    if (link.getAttribute('data-rota') === rota) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
+}
+
+function navegar() {
+  const rota = rotaAtual();
+  renderizarRota(ROTAS[rota]);
+  marcarLinkAtivo(rota);
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+export function iniciarRoteador() {
+  window.addEventListener('hashchange', navegar);
+  navegar(); // primeira renderização, ao carregar a página
+}

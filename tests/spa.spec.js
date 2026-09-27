@@ -1,9 +1,10 @@
 // tests/spa.spec.js — suíte de testes end-to-end da SPA (Playwright).
 //
-// Cobre os três comportamentos mais sensíveis a regressão, todos
-// exercitados manualmente ao longo do desenvolvimento e agora
-// automatizados: roteamento + acessibilidade (título/foco por rota),
-// validação do formulário de cadastro e persistência via localStorage.
+// Cobre os comportamentos mais sensíveis a regressão, todos exercitados
+// manualmente ao longo do desenvolvimento e agora automatizados:
+// roteamento + acessibilidade (título/foco por rota), navegação por
+// teclado e foco visível, validação do formulário de cadastro e
+// persistência via localStorage.
 const { test, expect } = require('@playwright/test');
 
 // A busca de endereço por CEP (js/validacao.js) chama a API pública
@@ -44,6 +45,55 @@ test.describe('Roteamento e acessibilidade (SPA via hash)', function () {
   test('rota desconhecida cai na rota padrão ("/")', async function ({ page }) {
     await page.goto('/#/rota-que-nao-existe');
     await expect(page).toHaveTitle('Instituto Semear — Início');
+  });
+});
+
+test.describe('Navegação por teclado e foco visível', function () {
+  test('link de salto ("Pular para o conteúdo") é o primeiro elemento tabulável e funciona', async function ({ page }) {
+    await page.goto('/');
+    await page.keyboard.press('Tab');
+    const foco = page.locator(':focus');
+    await expect(foco).toHaveClass(/pular-para-conteudo/);
+    await expect(foco).toHaveAttribute('href', '#conteudo-principal');
+
+    // Com foco no link, Enter deve levar o usuário ao início do conteúdo
+    // principal — sem isso, quem navega por teclado teria que tabular
+    // por todo o cabeçalho/menu antes de chegar ao conteúdo de cada rota.
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/#conteudo-principal$/);
+  });
+
+  test('elementos interativos recebem indicador de foco visível (outline)', async function ({ page }) {
+    await page.goto('/');
+    // Tab duas vezes: sai do link de salto e chega ao primeiro link real
+    // do cabeçalho (a marca "Instituto Semear").
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    const outline = await page.evaluate(function () {
+      const estilo = getComputedStyle(document.activeElement);
+      return { style: estilo.outlineStyle, width: estilo.outlineWidth };
+    });
+    expect(outline.style).not.toBe('none');
+    expect(outline.width).not.toBe('0px');
+  });
+
+  test('botão do menu mobile é operável só com teclado (Enter alterna aria-expanded)', async function ({ page }) {
+    // O botão de menu só é exibido (display: inline-flex) abaixo de
+    // 780px — em telas largas ele fica display:none e a navegação
+    // completa já aparece sempre visível. Preciso do viewport estreito
+    // para o botão sequer existir na árvore de foco.
+    await page.setViewportSize({ width: 375, height: 700 });
+    await page.goto('/');
+    const botao = page.locator('.botao-menu');
+    await botao.focus();
+    await expect(botao).toHaveAttribute('aria-expanded', 'false');
+
+    await page.keyboard.press('Enter');
+    await expect(botao).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#nav-principal')).toBeVisible();
+
+    await page.keyboard.press('Enter');
+    await expect(botao).toHaveAttribute('aria-expanded', 'false');
   });
 });
 

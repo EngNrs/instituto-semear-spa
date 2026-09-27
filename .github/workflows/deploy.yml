@@ -1,0 +1,70 @@
+name: Deploy (GitHub Pages)
+
+# Só dispara em push para main — que, no GitFlow adotado neste projeto,
+# só recebe merge quando develop já está pronta para virar uma release
+# (ver as tags v1.0.0, v1.0.1, v1.1.0, v1.2.0). Ou seja: o deploy
+# automático acontece exatamente quando uma release é feita, nunca a
+# partir de uma feature/* ou hotfix/* isolada.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # permite disparar manualmente pela aba Actions, se preciso
+
+# Permissões mínimas necessárias para publicar no GitHub Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configura Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instala dependências (apenas devDependencies de teste/build)
+        run: npm ci
+
+      - name: Instala o Chromium do Playwright
+        run: npx playwright install --with-deps chromium
+
+      # Roda a suíte contra o código-fonte primeiro — se a aplicação em
+      # si já está quebrada, nem vale a pena gerar a build de produção.
+      - name: Testes end-to-end (código-fonte)
+        run: npm test
+
+      - name: Gera a build de produção (dist/)
+        run: npm run build
+
+      # Portão de qualidade: a MESMA suíte, agora contra dist/. Só chega
+      # ao passo de publicação se o artefato minificado se comportar de
+      # forma idêntica ao código-fonte.
+      - name: Testes end-to-end (build de produção)
+        run: npx playwright test --config=playwright.build.config.js
+
+      - name: Prepara o artefato do GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publica no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

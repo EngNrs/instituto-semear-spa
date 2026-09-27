@@ -5,8 +5,8 @@
  * estiver pronto. Cada módulo cuida de UMA área de funcionalidade
  * (separação de responsabilidades também no JavaScript, não só nas
  * pastas):
- *   - router.js         → navegação entre rotas (próxima etapa)
- *   - templates.js       → carregar/renderizar os fragmentos de html/ (próxima etapa)
+ *   - router.js           → navegação entre rotas via hash (já funcional)
+ *   - templates.js        → carregar/renderizar os fragmentos de html/ (já funcional)
  *   - validacao.js        → validação do formulário de cadastro (próxima etapa)
  *   - armazenamento.js    → persistência dos cadastros via localStorage (próxima etapa)
  *   - menu.js             → alternância do menu mobile (já funcional, reaproveitado
@@ -17,7 +17,9 @@
  * de uma IIFE manual como no projeto estático anterior.
  */
 import './menu.js';
+import { iniciarRoteador } from './router.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('[Instituto Semear SPA] Arquitetura de pastas e módulos carregada.');
+  iniciarRoteador();
 });

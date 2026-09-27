@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instituto Semear SPA</title>
+  <meta name="description" content="Instituto Semear — aplicação de página única (SPA) para conhecer os projetos e se cadastrar como voluntário.">
+  <meta name="theme-color" content="#2f6b4f">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <a class="pular-para-conteudo" href="#conteudo-principal">Pular para o conteúdo</a>
+
+  <!-- Cabeçalho e navegação: parte fixa do "casco" da SPA — não é
+       recarregada a cada troca de rota, só o <main> abaixo é. -->
+  <header class="cabecalho">
+    <div class="envolucro">
+      <a class="marca" href="#/" data-rota="/">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M12 11C12 6.5 8.5 4 4 4C4 8.5 7 11 12 11Z" fill="var(--accent)" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M12 14C12 10.5 15 8 19 8C19 12.5 16 14 12 14Z" fill="var(--primary)" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        Instituto Semear
+      </a>
+
+      <button class="botao-menu" type="button" aria-expanded="false" aria-controls="nav-principal" aria-label="Abrir menu de navegação">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <nav class="nav-principal" id="nav-principal" aria-label="Navegação principal">
+        <ul>
+          <li><a href="#/" data-rota="/">Início</a></li>
+          <li><a href="#/projetos" data-rota="/projetos">Projetos</a></li>
+          <li><a href="#/cadastro" data-rota="/cadastro">Seja voluntário</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Área que o sistema de templates (js/templates.js, próxima etapa)
+       vai substituir a cada rota. Por enquanto mostra um estado inicial
+       simples, só para confirmar que a arquitetura de pastas e o
+       carregamento dos módulos já estão funcionando. -->
+  <main id="conteudo-principal" data-app="conteudo-rota">
+    <section class="secao">
+      <div class="envolucro">
+        <p class="etiqueta">SPA — Instituto Semear</p>
+        <h1>Arquitetura de pastas pronta</h1>
+        <p>Esta é a casca fixa da aplicação (cabeçalho, navegação e rodapé). O conteúdo desta área será trocado dinamicamente pelo sistema de templates e roteamento nas próximas etapas do desafio.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="envolucro">
+      <div>
+        <h3>Instituto Semear</h3>
+        <p>Organização da sociedade civil de interesse público (OSCIP) dedicada à segurança alimentar, educação e capacitação profissional.</p>
+      </div>
+      <div>
+        <h3>Contato</h3>
+        <address>
+          Rua das Acácias, 245 — Vila Esperança<br>
+          São Paulo — SP, 04567-000<br>
+          <a href="mailto:contato@institutosemear.org.br">contato@institutosemear.org.br</a><br>
+          <a href="tel:+551133224455">(11) 3322-4455</a>
+        </address>
+      </div>
+      <div>
+        <h3>Navegue</h3>
+        <ul>
+          <li><a href="#/" data-rota="/">Início</a></li>
+          <li><a href="#/projetos" data-rota="/projetos">Projetos</a></li>
+          <li><a href="#/cadastro" data-rota="/cadastro">Seja voluntário</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rodape-base">
+      <p style="margin:0;">© 2026 Instituto Semear. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <div class="toast-area" id="area-toast" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Módulos ES (import/export nativo do navegador) — cada um cuida de
+       uma área de responsabilidade só sua; app.js é o único ponto de
+       entrada e orquestra os demais. -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

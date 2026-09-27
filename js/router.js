@@ -14,6 +14,7 @@
  * programaticamente).
  */
 import { renderizarRota } from './templates.js';
+import { renderizarProjetos } from './componentes.js';
 
 const ROTAS = {
   '/': 'html/inicio.html',
@@ -21,6 +22,14 @@ const ROTAS = {
   '/cadastro': 'html/cadastro.html',
 };
 const ROTA_PADRAO = '/';
+
+// Nem toda rota precisa de um passo extra depois de o HTML entrar na
+// tela. "/projetos" precisa: o fragmento injetado traz só o <template>
+// vazio, e é aqui que eu disparo a geração dos cartões a partir dos
+// dados (ver componentes.js).
+const INICIALIZAR_ROTA = {
+  '/projetos': renderizarProjetos,
+};
 
 function rotaAtual() {
   const hash = window.location.hash.replace(/^#/, '');
@@ -37,11 +46,20 @@ function marcarLinkAtivo(rota) {
   });
 }
 
-function navegar() {
+async function navegar() {
   const rota = rotaAtual();
-  renderizarRota(ROTAS[rota]);
+  // Preciso esperar o fragmento terminar de entrar no DOM antes de
+  // rodar qualquer inicialização específica da rota — senão
+  // renderizarProjetos() procuraria #lista-projetos antes de ele
+  // existir na página.
+  await renderizarRota(ROTAS[rota]);
   marcarLinkAtivo(rota);
   window.scrollTo({ top: 0, behavior: 'instant' });
+
+  const inicializar = INICIALIZAR_ROTA[rota];
+  if (inicializar) {
+    inicializar();
+  }
 }
 
 export function iniciarRoteador() {

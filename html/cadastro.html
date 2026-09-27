@@ -15,6 +15,19 @@
       <p>Leva cerca de 3 minutos. Depois de enviado, a coordenação do projeto escolhido entra em contato pelo telefone ou e-mail informados.</p>
     </div>
 
+    <!--
+      Preenchido por js/armazenamento.js (restaurarContadorVoluntarios),
+      a partir do que já está salvo no localStorage — fica oculto por
+      padrão e só aparece quando existe histórico salvo neste navegador.
+    -->
+    <div class="alerta alerta--sucesso" id="contador-voluntarios" role="status" hidden>
+      <svg class="icone" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p data-texto></p>
+    </div>
+
     <div class="cartao-formulario">
       <form id="form-voluntario" autocomplete="on">
 
@@ -184,6 +197,7 @@
         </svg>
         <h2>Obrigado, <span data-nome>voluntário(a)</span>!</h2>
         <p>Seu cadastro foi recebido. A coordenação do projeto escolhido entrará em contato em breve.</p>
+        <p class="dica" data-total></p>
         <a class="botao botao--contorno-claro" href="#/projetos" data-rota="/projetos">Voltar para os projetos</a>
       </div>
     </div>

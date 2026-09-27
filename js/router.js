@@ -16,6 +16,7 @@
 import { renderizarRota } from './templates.js';
 import { renderizarProjetos } from './componentes.js';
 import { iniciarCadastro } from './validacao.js';
+import { restaurarContadorVoluntarios } from './armazenamento.js';
 
 const ROTAS = {
   '/': 'html/inicio.html',
@@ -30,7 +31,14 @@ const ROTA_PADRAO = '/';
 // dados (ver componentes.js).
 const INICIALIZAR_ROTA = {
   '/projetos': renderizarProjetos,
-  '/cadastro': iniciarCadastro,
+  // "/cadastro" precisa de dois passos: primeiro restaurar da tela o
+  // que já está salvo no localStorage (histórico de cadastros deste
+  // navegador), depois religar os listeners de validação/envio no
+  // formulário recém-injetado.
+  '/cadastro': function () {
+    restaurarContadorVoluntarios();
+    iniciarCadastro();
+  },
 };
 
 function rotaAtual() {

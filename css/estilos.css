@@ -616,6 +616,7 @@ fieldset legend {
   font-size: var(--fs-small);
   margin-bottom: var(--space-7);
 }
+.alerta[hidden] { display: none; }
 .alerta .icone { width: var(--space-5); height: var(--space-5); flex-shrink: 0; margin-top: .1em; }
 .alerta p { margin: 0; color: inherit; }
 .alerta--info {

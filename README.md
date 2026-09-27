@@ -84,18 +84,33 @@ instituto-semear-spa/
 ├── imagens/
 ├── tests/
 │   └── spa.spec.js     # testes end-to-end (Playwright)
+├── scripts/
+│   └── build.mjs        # build de produção (bundle + minificação)
 ├── playwright.config.js
+├── playwright.build.config.js  # roda a mesma suíte contra dist/
 └── package.json
 ```
 
 ## Testes automatizados
 
-A suíte (Playwright) cobre os três comportamentos mais sensíveis a regressão do projeto: roteamento + acessibilidade (título e foco por rota), validação do formulário de cadastro e persistência via `localStorage`.
+A suíte (Playwright) cobre os comportamentos mais sensíveis a regressão do projeto: roteamento + acessibilidade (título e foco por rota), navegação por teclado e foco visível, validação do formulário de cadastro e persistência via `localStorage`.
 
 ```bash
 npm test
 # equivalente a: playwright test
 ```
+
+## Build de produção
+
+O desenvolvimento continua sem build (ver "Como executar localmente"), mas para publicar a aplicação existe um passo opcional de otimização:
+
+```bash
+npm run build      # gera dist/ com JS empacotado+minificado, CSS e HTML minificados
+npm run preview    # serve dist/ em http://localhost:8090 para conferir o resultado
+npm run test:build # roda a MESMA suíte de testes apontando para dist/, não para o código-fonte
+```
+
+`scripts/build.mjs` usa o [esbuild](https://esbuild.github.io/) para resolver estaticamente a árvore de `import`/`export` a partir de `js/app.js` (8 módulos → 1 arquivo) e minificar o resultado, além de minificar `css/estilos.css` e os arquivos HTML com `html-minifier-terser`. Não usei Webpack/Vite porque ambos esperam processar `index.html` como ponto de entrada e mover assets estáticos para uma pasta `public/`, o que exigiria reestruturar `html/` e `imagens/` só por causa da build — o esbuild permite manter exatamente a mesma árvore de pastas em desenvolvimento e produção.
 
 O próprio `playwright.config.js` sobe e derruba o servidor de desenvolvimento automaticamente durante a execução dos testes — não é preciso rodar `npm start` manualmente antes.
 
